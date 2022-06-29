@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Scanner;
 
 public class MainGameField extends JPanel {
     private static MainGameField instance = null;
@@ -18,7 +17,7 @@ public class MainGameField extends JPanel {
     Player player1;
     Player player2;
     int gameMode = 1;
-    int aiLevel = 0;
+    int aiLevel = 2;
     public String[][] cell;
 
     public static synchronized MainGameField getInstance() {

@@ -3,7 +3,7 @@ import java.util.Random;
 public class AI extends AGamer {
     MainGameField gameField;
     String playerSign = "";
-    static int aiLevel = 0;
+    static int aiLevel = 2;
 
     public AI(String sign, int aiLevel, String playerSign) {
         this.sign = sign;
