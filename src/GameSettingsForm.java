@@ -18,7 +18,7 @@ public class GameSettingsForm extends JFrame {
         radioButtonModeTwoPlayers.setSelected(true);
         final JRadioButton radioButtonModeAgainstAI = new JRadioButton("Игрок против компьютера");
         add(radioButtonModeAgainstAI);
-        JLabel jLabelAILevel = new JLabel("Выберете уровень AI:");
+        JLabel jLabelAILevel = new JLabel("Уровень AI:");
         add(jLabelAILevel);
         final JSlider jSlider = new JSlider(0,2,0);
         add(jSlider);
@@ -29,46 +29,16 @@ public class GameSettingsForm extends JFrame {
         buttonGroup.add(radioButtonModeAgainstAI);
         JLabel jLabelLinesCount = new JLabel("Размер поля (по умолчанию 3 на 3): ");
         add(jLabelLinesCount);
-        final JTextField jTextFieldLinesCount = new JTextField();
-        jTextFieldLinesCount.setMaximumSize(new Dimension(100, 20));
-        add(jTextFieldLinesCount);
         JButton jButtonSetSettings = new JButton("Начать игру!");
         add(jButtonSetSettings);
         setVisible(true);
 
-        radioButtonModeAgainstAI.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (radioButtonModeAgainstAI.isSelected()) {
-                    jSlider.setVisible(true);
-                }
-            }
-        });
 
-        radioButtonModeTwoPlayers.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (radioButtonModeTwoPlayers.isSelected()) {
-                    jSlider.setVisible(false);
-                }
-            }
-        });
 
         jButtonSetSettings.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainGameField gameField = MainGameField.getInstance();
-                if (jTextFieldLinesCount.getText().isEmpty()) {
-                    gameField.linesCount = 3;
-                }
-                else {
-                    try {
-                        gameField.linesCount = Integer.parseInt(jTextFieldLinesCount.getText());
-                    }
-                    catch (NumberFormatException ex) {
-                        System.out.println("Необходимо ввести целое число!");
-                    }
-                }
                 gameField.startNewGame();
                 if (radioButtonModeAgainstAI.isSelected()) {
                     gameField.gameMode = 2;
