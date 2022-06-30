@@ -1,3 +1,5 @@
+package game;
+
 public abstract class AGamer {
     protected String sign;
 

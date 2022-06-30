@@ -1,4 +1,4 @@
-
+package game;
 
 public class Player extends AGamer{
     MainGameField gameField;

@@ -1,7 +1,11 @@
+package game;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 public class MainGameField extends JPanel {
     private static MainGameField instance = null;
@@ -19,6 +23,8 @@ public class MainGameField extends JPanel {
     int gameMode = 1;
     int aiLevel = 2;
     public String[][] cell;
+    private static Image xSymb;
+    private static Image oSymb;
 
     public static synchronized MainGameField getInstance() {
         if (instance == null)
@@ -44,7 +50,6 @@ public class MainGameField extends JPanel {
         setVisible(false);
         player1 = new Player("X");
         player2 = new Player("O");
-
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -74,13 +79,13 @@ public class MainGameField extends JPanel {
         if (player1.isShotReady == 1) {
             nextTurn = true;
             player2.isShotReady = 0;
-            System.out.println("Player 1 shot!");
+            System.out.println("game.Player 1 shot!");
             player1.shot(x,y);
         }
         if (player1.win()) {
-            System.out.println("Player 1 WIN!!!");
+            System.out.println("game.Player 1 WIN!!!");
             gameOver = true;
-            gameOverMessage = "Player 1 WIN!!!";
+            gameOverMessage = "game.Player 1 WIN!!!";
         }
         repaint();
         if (isFieldFull() && !player1.win() && !player2.win()) {
@@ -90,16 +95,16 @@ public class MainGameField extends JPanel {
         if (player2.isShotReady == 1) {
             nextTurn = false;
             player1.isShotReady = 0;
-            System.out.println("Player 2 shot!");
+            System.out.println("game.Player 2 shot!");
             player2.shot(x,y);
         }
         if (!gameOver) {
             player2.shot(x, y);
         }
         if (player2.win()) {
-            System.out.println("Player 2 WIN!!!");
+            System.out.println("game.Player 2 WIN!!!");
             gameOver = true;
-            gameOverMessage = "Player 2 WIN!!!";
+            gameOverMessage = "game.Player 2 WIN!!!";
         }
         repaint();
         if (isFieldFull() && !player2.win() && !player1.win()) {
@@ -122,9 +127,9 @@ public class MainGameField extends JPanel {
         if (!gameOver) {
             if (player.shot(x, y)) {
                 if (player.win()) {
-                    System.out.println("Player WIN!!!");
+                    System.out.println("game.Player WIN!!!");
                     gameOver = true;
-                    gameOverMessage = "Player WIN!!!";
+                    gameOverMessage = "game.Player WIN!!!";
                 }
                 if (isFieldFull()) {
                     gameOver = true;
@@ -135,9 +140,9 @@ public class MainGameField extends JPanel {
                     ai.shot(x, y);
                 }
                 if (ai.win()) {
-                    System.out.println("AI WIN!!!");
+                    System.out.println("game.AI WIN!!!");
                     gameOver = true;
-                    gameOverMessage = "AI WIN!!!";
+                    gameOverMessage = "game.AI WIN!!!";
                 }
                 repaint();
                 if (isFieldFull() && !ai.win()) {
@@ -188,25 +193,31 @@ public class MainGameField extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        for (int i = 0; i <= this.linesCount; i++) {
-            g.drawLine(0, i * this.cellSize, FIELD_SIZE, i * this.cellSize);
-            g.drawLine(i * this.cellSize, 0, i * this.cellSize, FIELD_SIZE);
+        try {
+            xSymb = ImageIO.read(MainGameField.class.getResourceAsStream("../img/x.jpg"));
+            oSymb = ImageIO.read(MainGameField.class.getResourceAsStream("../img/o.jpg"));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        super.paintComponent(g);
+
         for (int i = 0; i < linesCount; i++) {
             for (int j = 0; j < linesCount; j++) {
                 if (cell[i][j] != NOT_SIGN) {
                     if (cell[i][j] == "X") {
-                        g.setColor(Color.RED);
-                        g.drawLine((i * cellSize), (j * cellSize), (i + 1) * cellSize, (j + 1) * cellSize);
-                        g.drawLine((i + 1) * cellSize, (j * cellSize), (i * cellSize), (j + 1) * cellSize);
+                        g.drawImage(xSymb,(i * cellSize)+5,(j * cellSize)+5, cellSize-10, cellSize-10,null);
                     }
                     if (cell[i][j] == "O" || cell[i][j] == "O") {
-                        g.setColor(Color.BLUE);
-                        g.drawOval((i * cellSize), (j * cellSize), cellSize, cellSize);
+                        g.drawImage(oSymb,(i * cellSize)+5,(j * cellSize)+5, cellSize-10, cellSize-10,null);
                     }
                 }
             }
+        }
+
+        for (int i = 0; i <= this.linesCount; i++) {
+            g.drawLine(0, i * this.cellSize, FIELD_SIZE, i * this.cellSize);
+            g.drawLine(i * this.cellSize, 0, i * this.cellSize, FIELD_SIZE);
         }
 
         if (gameOver) {
